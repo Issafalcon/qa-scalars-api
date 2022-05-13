@@ -51,7 +51,10 @@ app.post('/create', (req,res) => {
     // insert the item into our Database
     db.insert(item, (err, item) => {
         //if there is an error, send back the error
-        if (err) res.send(err);
+        if (err){
+            console.log(`\nError - `, err);
+            return res.send(err);
+        }
         // otherwise 201 - Created and the item
         res.status(201).send(item);
         //log that item to console
@@ -67,7 +70,10 @@ app.get('/read', (req,res) => {
     // reading all items from database
     db.find({}, (err, items) => {
         //if there is an error, send back the error
-        if (err) res.send(err);
+        if (err){
+            console.log(`\nError - `, err);
+            return res.send(err);
+        }
         // otherwise 200 - OK
         res.status(200).send(items);
         //log the items to console
@@ -78,12 +84,16 @@ app.get('/read', (req,res) => {
 // READ ONE (Get)
 app.get('/read/:id', (req,res) => {
     // log that we are running the read operation
-    console.log(`\nRead - GET`);
+    console.log(`\nRead - GET`, req.params.id);
 
     // reading item from database by id
     db.find({_id : parseInt(req.params.id)}, (err, item) => {
         //if there is an error, send back the error
-        if (err) res.send(err);
+        if (err){
+            console.log(`\nError - `, err);
+            return res.send(err);
+        }
+            
         // otherwise 200 - OK
         res.status(200).send(item);
         //log the item to console
@@ -94,7 +104,7 @@ app.get('/read/:id', (req,res) => {
 // UPDATE (Put)
 app.put('/update/:id', (req,res) => {
     // log that we are running the read operation
-    console.log(`\nUpdate - PUT`);
+    console.log(`\nUpdate - PUT`, req.params.id);
     // create a new item object
     let updatedItem = itemBuilder(req.body.name, req.body.description, req.body.price, parseInt(req.params.id));
 
@@ -102,7 +112,10 @@ app.put('/update/:id', (req,res) => {
     // send the new item
     db.update({_id : parseInt(req.params.id)}, updatedItem, (err, itemID) => {
         //if there is an error, send back the error
-        if (err) res.send(err);
+        if (err){
+            console.log(`\nError - `, err);
+            return res.send(err);
+        }
         // otherwise 200 - OK
         res.sendStatus(200);
         // log the item ID being returned
@@ -113,12 +126,15 @@ app.put('/update/:id', (req,res) => {
 // DELETE (Delete)
 app.delete('/delete/:id', (req,res) => {
     // log that we are running the delete operation
-    console.log(`\nDelete - DELETE`);
+    console.log(`\nDelete - DELETE`, req.params.id);
 
     // deleting item from database by id
     db.remove({_id : parseInt(req.params.id)}, (err, itemID) => {
         //if there is an error, send back the error
-        if (err) res.send(err);
+        if (err){
+            console.log(`\nError - `, err);
+            return res.send(err);
+        }
         // otherwise 200 - OK
         res.sendStatus(200);
         //log the item id to console
