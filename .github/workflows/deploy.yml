@@ -37,12 +37,10 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
 
     - name: Build
-      id: build-image
       run: |
         docker build -t ${{ env.CONTAINER_NAME }} .
 
     - name: Tag and push sha
-      id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}
@@ -51,7 +49,6 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
     
     - name: Tag, and push latest image to Amazon ECR
-      id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: latest
