@@ -1,0 +1,52 @@
+# https://kubernetes.io/docs/concepts/services-networking/service/
+apiVersion: v1
+kind: Service
+metadata:
+  name: scalars-app
+  namespace: default
+spec:
+  selector:
+    app: scalars-app
+  type: LoadBalancer
+  ports:
+    - name: scalars-app
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+# https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scalars-app
+  namespace: default
+  labels:
+    app: scalars-app
+spec:
+  selector:
+    matchLabels:
+      app: scalars-app
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: scalars-app
+    spec:
+      containers:
+        - name: scalars-app
+          image: 467432681913.dkr.ecr.us-west-2.amazonaws.com/scalars:49ec17e9b25bfae9345d2b5cd864cfc6cc34b8ab
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 100m
+              memory: 100Mi
+          ports:
+            - containerPort: 8080
