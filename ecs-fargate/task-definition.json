@@ -3,7 +3,7 @@
        { 
           "essential": true,
           "image": "467432681913.dkr.ecr.us-west-2.amazonaws.com/scalars:70af7efb3186aadb3d961063e1542287b10d1a42",
-          "name": "scalars-qa-app",
+          "name": "scalars-app-container",
           "portMappings": [ 
              { 
                 "containerPort": 8080,
@@ -15,7 +15,7 @@
     ],
     "cpu": "256",
     "executionRoleArn": "arn:aws:iam::467432681913:role/ecsTaskExecutionRole",
-    "family": "fargate-task-definition",
+    "family": "scalars-app-task",
     "memory": "512",
     "networkMode": "awsvpc",
     "runtimePlatform": {

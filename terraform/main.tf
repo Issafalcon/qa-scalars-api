@@ -16,3 +16,14 @@ resource "aws_ecs_cluster" "scalars_qa" {
   }
 }
 
+resource "aws_ecs_task_definition" "scalars_qa" {
+  family                = "scalars-app-task"
+  container_definitions = file("ecs-task-definitions/scalars-app.json")
+}
+
+resource "aws_ecs_service" "scalars_qa" {
+  name            = "scalars-app"
+  cluster         = aws_ecs_cluster.scalars_qa.id
+  desired_count   = 2
+  task_definition = aws_ecs_task_definition.scalars_qa.arn
+}

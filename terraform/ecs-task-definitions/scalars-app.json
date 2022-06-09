@@ -1,0 +1,8 @@
+[
+    {
+       "name": "scalars-app-container",
+       "image": "467432681913.dkr.ecr.us-west-2.amazonaws.com/scalars:70af7efb3186aadb3d961063e1542287b10d1a42",
+       "memory": 512,
+       "cpu": 256
+    }
+ ] 
