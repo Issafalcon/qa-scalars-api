@@ -1,17 +1,19 @@
 {
-    "containerDefinitions": [ 
-       { 
-          "essential": true,
-          "image": "467432681913.dkr.ecr.us-west-2.amazonaws.com/scalars:70af7efb3186aadb3d961063e1542287b10d1a42",
-          "name": "scalars-app-container",
-          "portMappings": [ 
-             { 
-                "containerPort": 8080,
-                "hostPort": 8080,
-                "protocol": "tcp"
-             }
-          ]
-       }
+    "containerDefinitions": [
+        {
+            "essential": true,
+            "image": "467432681913.dkr.ecr.us-west-2.amazonaws.com/scalars:70af7efb3186aadb3d961063e1542287b10d1a42",
+            "name": "scalars-app-container",
+            "cpu": 256,
+            "memory": 512,
+            "portMappings": [
+                {
+                    "containerPort": 8080,
+                    "hostPort": 8080,
+                    "protocol": "tcp"
+                }
+            ]
+        }
     ],
     "family": "scalars-app-task"
- }
+}
