@@ -28,7 +28,11 @@ resource "aws_ecs_task_definition" "scalars_qa" {
   }
   cpu                   = 256
   memory                = 512
-  container_definitions = file("ecs-task-definitions/scalars-app.json")
+  container_definitions = file("../ecs-fargate/task-definition.terraform.json")
+
+  lifecycle {
+    ignore_changes = [container_definitions]
+  }
 }
 
 resource "aws_ecs_service" "scalars_qa" {
@@ -43,5 +47,9 @@ resource "aws_ecs_service" "scalars_qa" {
     subnets          = ["subnet-759ae85e"]
     security_groups  = ["sg-0a08d5e0a0179e91e"]
     assign_public_ip = true
+  }
+
+  lifecycle {
+    ignore_changes = [task_definition]
   }
 }
