@@ -13,15 +13,5 @@
           ]
        }
     ],
-    "cpu": "256",
-    "executionRoleArn": "arn:aws:iam::467432681913:role/ecsTaskExecutionRole",
-    "family": "scalars-app-task",
-    "memory": "512",
-    "networkMode": "awsvpc",
-    "runtimePlatform": {
-         "operatingSystemFamily": "LINUX"
-     },
-    "requiresCompatibilities": [ 
-        "FARGATE" 
-     ]
+    "family": "scalars-app-task"
  }
