@@ -1,0 +1,25 @@
+[
+   {
+      "essential": true,
+      "image": "467432681913.dkr.ecr.us-west-2.amazonaws.com/scalars:70af7efb3186aadb3d961063e1542287b10d1a42",
+      "name": "scalars-app",
+      "portMappings": [
+         {
+            "containerPort": 8080,
+            "hostPort": 80,
+            "protocol": "tcp"
+         }
+      ],
+      "cpu": 256,
+      "executionRoleArn": "arn:aws:iam::467432681913:role/ecsTaskExecutionRole",
+      "family": "fargate-task-definition",
+      "memory": 512,
+      "networkMode": "awsvpc",
+      "runtimePlatform": {
+         "operatingSystemFamily": "LINUX"
+      },
+      "requiresCompatibilities": [
+         "FARGATE"
+      ]
+   }
+]
