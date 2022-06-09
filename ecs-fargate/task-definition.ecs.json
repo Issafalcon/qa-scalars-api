@@ -2,7 +2,7 @@
     "containerDefinitions": [
         {
             "essential": true,
-            "image": "467432681913.dkr.ecr.us-west-2.amazonaws.com/scalars:70af7efb3186aadb3d961063e1542287b10d1a42",
+            "image": "467432681913.dkr.ecr.us-west-2.amazonaws.com/scalars:ed5e3f643dc64df1f19a5fd722b63e41d3732b8b",
             "name": "scalars-app-container",
             "cpu": 256,
             "memory": 512,
