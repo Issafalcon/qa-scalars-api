@@ -36,20 +36,59 @@ resource "aws_ecs_task_definition" "scalars_qa" {
 }
 
 resource "aws_ecs_service" "scalars_qa" {
-  name            = "scalars-app"
+  name            = "scalars-app-service"
   cluster         = aws_ecs_cluster.scalars_qa.id
   desired_count   = 2
   task_definition = aws_ecs_task_definition.scalars_qa.arn
   launch_type     = "FARGATE"
 
+  load_balancer {
+    target_group_arn = aws_lb_target_group.scalars_app.arn
+    container_name   = "scalars-app-container"
+    container_port   = 8080
+  }
+
   network_configuration {
     # Todo create subnets and sg's in terraform
-    subnets          = ["subnet-759ae85e"]
-    security_groups  = ["sg-0a08d5e0a0179e91e"]
+    subnets          = [aws_default_subnet.default.id]
+    security_groups  = [aws_default_security_group.default.id]
     assign_public_ip = true
   }
 
   lifecycle {
     ignore_changes = [task_definition]
   }
+}
+
+resource "aws_default_vpc" "default" {
+ }
+
+resource "aws_lb_target_group" "scalars_app" {
+  name     = "scalars-app-lb-tg"
+  port     = 8080
+  protocol = "HTTP"
+  vpc_id   = aws_default_vpc.default.id
+}
+
+resource "aws_default_subnet" "default_az1" {
+  availability_zone = "us-west-2d"
+}
+
+resource "aws_default_security_group" "default" {
+  vpc_id = aws_default_vpc.default.id
+
+  ingress {
+    protocol  = "tcp"
+    self      = true
+    from_port = 80
+    to_port   = 80
+  }
+}
+
+resource "aws_lb" "scalars_qa" {
+  name               = "scalars-app-lb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_default_security_group.default.id]
+  subnets            = [for subnet in aws_default_subnet.default_az1 : subnet.id]
 }
