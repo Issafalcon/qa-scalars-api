@@ -18,7 +18,6 @@ resource "aws_ecs_cluster" "scalars_qa" {
 
 resource "aws_ecs_task_definition" "scalars_qa" {
   family = "scalars-app-task"
-  # Todo hardcoded arn
   execution_role_arn       = "arn:aws:iam::467432681913:role/ecsTaskExecutionRole"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
@@ -29,10 +28,6 @@ resource "aws_ecs_task_definition" "scalars_qa" {
   cpu                   = 256
   memory                = 512
   container_definitions = file("../ecs-fargate/task-definition.terraform.json")
-
-  lifecycle {
-    ignore_changes = [container_definitions]
-  }
 }
 
 resource "aws_ecs_service" "scalars_qa" {
@@ -50,7 +45,7 @@ resource "aws_ecs_service" "scalars_qa" {
 
   network_configuration {
     # Todo create subnets and sg's in terraform
-    subnets          = [aws_default_subnet.default.id]
+    subnets          = [aws_default_subnet.default_az1.id, aws_default_subnet.default_az2.id]
     security_groups  = [aws_default_security_group.default.id]
     assign_public_ip = true
   }
@@ -67,11 +62,31 @@ resource "aws_lb_target_group" "scalars_app" {
   name     = "scalars-app-lb-tg"
   port     = 8080
   protocol = "HTTP"
+  target_type = "ip"
   vpc_id   = aws_default_vpc.default.id
 }
 
+resource "aws_alb_listener" "front_end" {
+  load_balancer_arn = "${aws_lb.scalars_qa.arn}"
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    target_group_arn = "${aws_lb_target_group.scalars_app.arn}"
+    type             = "forward"
+  }
+}
+# resource "aws_lb_target_group_attachment" "test" {
+#   target_group_arn = aws_lb_target_group.scalars_app.arn
+#   target_id        = aws_lb.scalars_qa.arn
+# }
+
 resource "aws_default_subnet" "default_az1" {
   availability_zone = "us-west-2d"
+}
+
+resource "aws_default_subnet" "default_az2" {
+  availability_zone = "us-west-2b"
 }
 
 resource "aws_default_security_group" "default" {
@@ -90,5 +105,5 @@ resource "aws_lb" "scalars_qa" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_default_security_group.default.id]
-  subnets            = [for subnet in aws_default_subnet.default_az1 : subnet.id]
+  subnets            = [aws_default_subnet.default_az1.id, aws_default_subnet.default_az2.id]
 }
