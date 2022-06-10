@@ -47,8 +47,7 @@ jobs:
     - name: Tag and push sha
       id: build-image
       env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_REF: ${{env.ECR_REGISTRY}}/${{env.ECR_REPOSITORY}}:${{github.sha}}
+        IMAGE_REF: ${{steps.login-ecr.outputs.registry}}/${{env.ECR_REPOSITORY}}:${{github.sha}}
       run: |
         docker tag ${{ env.CONTAINER_NAME }} $IMAGE_REF
         docker push $IMAGE_REF
